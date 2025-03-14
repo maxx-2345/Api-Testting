@@ -32,12 +32,14 @@ class _HomescreenState extends State<Homescreen> {
 
     try{
       final itemList = await itemServices.fetchListItem();
+      if(itemList == null){
+        CircularProgressIndicator();
+      }
     setState(() {
-      _itemList = itemList;
-      print("itemList_log::${_itemList?.products?[0].title}");
 
+      _itemList = itemList;
       //cart edit 2- generate list and pick specific index and initialize all products with false so it shows yellow button
-      cartStatus = List.generate(_itemList!.products!.length, (index)=> false);
+      // cartStatus = List.generate(_itemList!.products!.length, (index)=> false);
       _isLoading = false;
     });
     } catch(e){
@@ -50,6 +52,7 @@ class _HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(' Item List build: $_itemList');
     return Scaffold(
       appBar: AppBar(
         title: Text("Dummy Api"),
@@ -84,8 +87,10 @@ class _HomescreenState extends State<Homescreen> {
                      child: Padding(
                        padding: const EdgeInsets.all(10.0),
                        child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
                          children: [
-                           Row(
+
+                                 Row(
                              children: [
                                Text("Title: ",style: TextStyle(fontWeight: FontWeight.bold),),
                                Expanded(child: Text('${value?.title}',overflow: TextOverflow.ellipsis, maxLines: 2,)),
@@ -100,74 +105,49 @@ class _HomescreenState extends State<Homescreen> {
                            Row(
                              children: [
                                Text("Price: ",style: TextStyle(fontWeight: FontWeight.bold),),
-                               Expanded(child: Text('${value?.price}'))
+                               Expanded(child: Text('${value?.price.toString()}'))
+                             ],
+                           ),
+                           Row(
+                             children: [
+                               Text("Discounted price: ",style: TextStyle(fontWeight: FontWeight.bold),),
+                               Expanded(child: Text('${value?.discountPercentage.toString()}'))
                              ],
                            ),
                            Row(
                              children: [
                                Text("Category: ",style: TextStyle(fontWeight: FontWeight.bold),),
-                               Expanded(child: Text('${value?.category}'))
+                               Expanded(child: Text('${value?.category.toString()}'))
                              ],
                            ),
-                           Row(
-                             children: [
-                               Text("Tags: ",style: TextStyle(fontWeight: FontWeight.bold),),
-                               Expanded(child: Text(value?.tags?.join(" , ") ?? "No Tags"))
-                             ],
-                           ),
-                           Row(
-                             children: [
-                               Text("Ratings: ",style: TextStyle(fontWeight: FontWeight.bold),),
-                               Expanded(child: Text('${value?.rating}/5'))
-                             ],
-                           ),
-
-                     // cart edit 3- toggle button
-                     (value?.stock ?? 0) > 0 ? GestureDetector(
-                       onTap: () {
-                         setState(() {
-                           cartStatus[index] = !cartStatus[index]; // Toggle status
-                         });
-                       },
-                       child: Container(
-                         padding: EdgeInsets.symmetric(
-                             vertical: 10, horizontal: 20),
-                         decoration: BoxDecoration(
-                           color: cartStatus[index]
-                               ? Colors.green
-                               : Colors.yellow,
-                           borderRadius: BorderRadius.circular(20),
-                         ),
-                         child: Center(
-                           child: Text(
-                             cartStatus[index]
-                                 ? "Added to Cart"
-                                 : "Add to Cart",
-                             style: TextStyle(color: Colors.black),
-                           ),
-                         ),
-                       ),
-                     ) : Container(
+                     value!.stock > 10 ? Container(
+                       height: 50,
+                       width: 150,
                        decoration: BoxDecoration(
-                         color: Colors.grey,
-                         border: Border.all(width: 0.5,color: Colors.black),
+                         border: Border.all(width: 1,color: Colors.black),
                          borderRadius: BorderRadius.circular(20),
+                         color: Colors.green,
                        ),
-                       child: Center(
-                         child: Padding(
-                           padding: const EdgeInsets.all(5.0),
-                           child: Text("Out of Stock"),
-                         ),
+                       child: Center(child: Text("Stock Available",style: TextStyle(color: Colors.black),)),
+                     ): Container(
+                       height: 50,
+                       width: 150,
+                       decoration: BoxDecoration(
+                         border: Border.all(width: 1,color: Colors.black),
+                           borderRadius: BorderRadius.circular(20),
+                         color: Colors.red
                        ),
+                       child: Center(child: Text("Low Stock",style: TextStyle(color: Colors.black),)),
                      )
 
-                     ],
-                       ),
-                     ),
-                   ),
-                 ),
+               ]
+               ),
+               ),
+               ),
+               ),
                );
-             }),
+             }
+             ),
        ),
   ),
    floatingActionButton: FloatingActionButton(
