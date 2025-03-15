@@ -1,8 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:testing/model/item_list_model.dart';
-import 'package:testing/provider_demo/product_provider.dart';
+import 'package:testing/services/item_list_services.dart';
+
+import '../provider_demo/product_provider.dart';
 class ProductDetailsScreen extends StatefulWidget {
   final Products product;
   const ProductDetailsScreen({super.key, required this.product});
@@ -92,13 +93,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ],
                     ),
                     Divider(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Rating: ",style: TextStyle(fontWeight: FontWeight.bold),),
-                        Expanded(child: Text("${widget.product.rating}"))
-                      ],
-                    ),
+                    // Row(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     Text("Rating: ",style: TextStyle(fontWeight: FontWeight.bold),),
+                    //     Expanded(child: Text("${widget.product!.rating}"))
+                    //   ],
+                    // ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
 

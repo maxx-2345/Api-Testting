@@ -30,78 +30,77 @@ class itemListModel {
   }
 }
 
-class Products {
+class Products{
   final int id;
+  final List<String> images;
   final String title;
   final String description;
   final double price;
   final double discountPercentage;
-  final double rating;
+  final String category;
   final int stock;
   final String brand;
-  final String category;
-  final String thumbnail;
-  final List<String> images;
+  // final List tags;
 
-  Products({
-    required this.id,
-    required this.title,
+
+  Products(
+  {required this.id,
+  required this.images,
+  required this.title,
     required this.description,
     required this.price,
     required this.discountPercentage,
-    required this.rating,
-    required this.stock,
-    required this.brand,
     required this.category,
-    required this.thumbnail,
-    required this.images,
+    required this.stock,
+    required this.brand
+    // required this.tags
+
   });
 
-  factory Products.fromJson(Map<String, dynamic> json) {
-    List<String> processedImagesList = [];
-    if (json['images'] != null) {
-      try {
-        ///checking if images are not null
-        processedImagesList = (json['images'] as List)
-            .map((image) => image != null ? image.toString() : '')
+  factory Products.fromJson(Map<String,dynamic> json){
+    List<String> processedImages = [];
+    try{
+      if(json['images'] != null){
+        processedImages = (json['images'] as List)
+            .map((image)=> image != null ? image.toString():'')
             .toList();
-      } catch (e) {
-        print('Error processing images: $e');
-        ///return empty list if no images avail
-        processedImagesList = [];
       }
+    }catch(e){
+      processedImages = [];
+
     }
 
     return Products(
-      id: json['id'] ?? 0,
-      title: json['title']?.toString() ?? '',
-      description: json['description']?.toString() ?? '',
-      price: (json['price'] != null) ? (json['price'] as num).toDouble() : 0.0,
-      discountPercentage: (json['discountPercentage'] != null)
-          ? (json['discountPercentage'] as num).toDouble()
-          : 0.0,
-      rating: (json['rating'] != null) ? (json['rating'] as num).toDouble() : 0.0,
-      stock: json['stock'] ?? 0,
-      brand: json['brand']?.toString() ?? '',
-      category: json['category']?.toString() ?? '',
-      thumbnail: json['thumbnail']?.toString() ?? '',
-      images: processedImagesList,
+        id: json['id'] ?? 0,
+        images: processedImages,
+        title: json['title'] ?? '',
+      brand: json['brand'] ?? '',
+      description: json['description'] ?? '',
+      price: json['price'] as double ?? 0.0,
+        discountPercentage: json['discountPercentage'] == null
+            ? 0.0
+            : (json['discountPercentage'] is int
+            ? (json['discountPercentage'] as int).toDouble()
+            : json['discountPercentage'] as double
+        ),
+      category: json['category'] ?? '',
+     stock: json['stock'] ?? 0,
+      // tags: json['tags'] ?? []
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['images'] = this.images;
+    data['brand'] = this.brand;
     data['title'] = this.title;
-    data['description'] = this.description;
+    data['description']= this.description;
     data['price'] = this.price;
     data['discountPercentage'] = this.discountPercentage;
-    data['rating'] = this.rating;
-    data['stock'] = this.stock;
-    data['brand'] = this.brand;
     data['category'] = this.category;
-    data['thumbnail'] = this.thumbnail;
-    data['images'] = this.images;
+    data['stock'] = this.stock;
+    // data['tags'] = this.tags;
     return data;
   }
 }
