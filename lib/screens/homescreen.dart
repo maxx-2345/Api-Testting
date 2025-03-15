@@ -32,6 +32,10 @@ class _HomescreenState extends State<Homescreen> {
 
     try{
       final itemList = await itemServices.fetchListItem();
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+        });
+      });
     setState(() {
       _itemList = itemList;
       print("itemList_log::${_itemList?.products?[0].title}");
@@ -112,13 +116,13 @@ class _HomescreenState extends State<Homescreen> {
                            Row(
                              children: [
                                Text("Tags: ",style: TextStyle(fontWeight: FontWeight.bold),),
-                               Expanded(child: Text(value?.tags?.join(" , ") ?? "No Tags"))
+                               // Expanded(child: Text(value?.tags?.join(" , ") ?? "No Tags"))
                              ],
                            ),
                            Row(
                              children: [
                                Text("Ratings: ",style: TextStyle(fontWeight: FontWeight.bold),),
-                               Expanded(child: Text('${value?.rating}/5'))
+                               // Expanded(child: Text('${value?.rating}/5'))
                              ],
                            ),
 
